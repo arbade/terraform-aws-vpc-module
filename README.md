@@ -287,12 +287,6 @@ ok  	command-line-arguments	280.776s
 
 ```
 
-
-## TODO
-### Implement
-* IPv6 ReverseDNS (https://github.com/hashicorp/terraform/issues/9404)
-* Implement tests for additional Transit Gateway propgations and static routes
-
 ## Unit Testing
 
 ### Overview
