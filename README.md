@@ -71,9 +71,9 @@ commands will detect it and remind you to do so if necessary.
 
 First step of running existing unit-test cases on terraform-aws-module-vpc is define the which terraform modules execution on AWS Account that :
 ```
-➜  terraform-aws-module-vpc git:(dev) ✗ cd test 
-➜  test git:(dev) ✗ export AWS_PROFILE=arbade-aws
-➜  test git:(dev) ✗ terraform init
+➜  terraform-aws-module-vpc git:(dev) ✗ cd unit-test 
+➜  unit-test git:(dev) ✗ export AWS_PROFILE=arbade-aws
+➜  unit-test git:(dev) ✗ terraform init
 Initializing modules...
 
 Initializing the backend...
@@ -302,7 +302,7 @@ It would be able to see general structure of arbade-aws-module-vpc at the below 
 ├── private_subnet.tf
 ├── provider.tf
 ├── public_subnet.tf
-├── test
+├── unit-test
 │   ├── main.tf
 │   ├── module_vpc_output.tf
 │   └── vpc_test.go
@@ -329,10 +329,10 @@ If not, it should be looking up goLang docs is that : [Go Lang Doc](https://go.d
 
 First step of running existing unit-test cases on arbade-aws-module-vpc is define the which terraform modules execution on AWS Account that :
 ```
-➜  arbade-aws-module-vpc git:(dev) ✗ cd test 
-➜  test git:(dev) ✗ 
-➜  test git:(dev) export AWS_PROFILE=arbade
-➜  test git:(dev) terraform init 
+➜  arbade-aws-module-vpc git:(dev) ✗ cd unit-test 
+➜  unit-test git:(dev) ✗ 
+➜  unit-test git:(dev) export AWS_PROFILE=arbade
+➜  unit-test git:(dev) terraform init 
 Initializing modules...
 
 Initializing the backend...
@@ -369,13 +369,13 @@ go get "github.com/gruntwork-io/terratest/modules/terraform"
 
 Third point of view is running the test on your local terminal
 ```
-go test -v ../test -timeout 20m
+go test -v ../unit-test/vpc-test.go -timeout 20m
 ```
 
 After than, it would be able to see unit-test cases logs on terminal
 
 ```
-➜  test git:(dev) ✗ go test -v ../unit-tests -timeout 20m
+➜  test git:(dev) ✗ go test -v ../unit-test/vpc-test.go -timeout 20m
 
 ➜  test git:(dev) ✗ go test -v vpc_test.go 
 === RUN   Test_ShouldBeCreateAndDestroyVPC
