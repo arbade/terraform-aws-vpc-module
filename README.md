@@ -91,12 +91,12 @@ should now work.
 If you ever set or change modules or backend configuration for Terraform,
 rerun this command to reinitialize your working directory. If you forget, other
 commands will detect it and remind you to do so if necessary.
-➜  test git:(dev) ✗ ls -la 
+➜  unit-test git:(dev) ✗ ls -la 
 total 56
 drwxr-xr-x  9 demira  1977418181   288 Dec 31 14:45 .
 drwxr-xr-x  9 demira  1977418181   288 Dec 31 15:29 ..
 -rw-r--r--  1 demira  1977418181   330 Dec 30 16:24 main.tf
--rw-r--r--  1 demira  1977418181  1775 Dec 31 15:11 s3_test.go
+-rw-r--r--  1 demira  1977418181  1775 Dec 31 15:11 vpc_test.go
 -rw-r--r--  1 demira  1977418181   228 Dec 31 15:04 test_output.tf
 
 ```
