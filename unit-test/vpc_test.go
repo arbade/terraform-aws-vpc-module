@@ -10,12 +10,31 @@ import (
 	test_structure "github.com/gruntwork-io/terratest/modules/test-structure"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"sort"
 )
+
+func getKeys(m map[string]string) []string {
+	keys := make([]string, 0, len(m))
+	for k := range m {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+	return keys
+}
+
+func getValues(m map[string]string) []string {
+	values := make([]string, 0, len(m))
+	keys := getKeys(m)
+	for _, k := range keys {
+		values = append(values, m[k])
+	}
+	return values
+}
 
 func Test_ShouldBeCreateAndDestroyVPC(t *testing.T) {
 	t.Parallel()
 
-	testFolder := test_structure.CopyTerraformFolderToTemp(t, "../", "/test")
+	testFolder := test_structure.CopyTerraformFolderToTemp(t, "../", "/unit-test")
 
 	//given
 
@@ -29,6 +48,10 @@ func Test_ShouldBeCreateAndDestroyVPC(t *testing.T) {
 	awsRegion := aws.GetRandomStableRegion(t, defaultRegion, restrictedRegionsList)
 	azs := aws.GetAvailabilityZones(t, awsRegion)
 
+	expectedNatGatewayPublicIPTagKeys := []string{"Name", "Project", "Terraform"}
+	excectedNatGatewayPublicIPTagValueOfOne := []string{"eu-central-1a", "VPC-Test", "true"}
+	expectedNatGatewayPublicIPTagValueOfTwo := []string{"eu-central-1b", "VPC-Test", "true"}
+	expectedNatGatewayPublicIPTagValueOfThree := []string{"eu-central-1c", "VPC-Test", "true"}
 	expectedPrivateCidrBlocks := []string{"10.100.0.96/28", "10.100.0.112/28", "10.100.0.128/28"}
 	expectedAvailabilityZones := []string{"eu-central-1a", "eu-central-1b", "eu-central-1c"}
 	//when
@@ -99,8 +122,17 @@ func Test_ShouldBeCreateAndDestroyVPC(t *testing.T) {
 	transitGatewayRouteTableId := terraform.Output(t, terraformOptions, "transit_gateway_route_table_id")
 	transitGatewayVpcAtId := terraform.Output(t, terraformOptions, "transit_gateway_vpc_attachment_id")
 	actualPrivateCidrBlocks := terraform.OutputList(t, terraformOptions, "private_subnet_cidr_block")
+	actualNatGatewayPublicIPTagKeys := terraform.OutputMap(t, terraformOptions, "public_subnet_cidr_blocks_one")
+	actualNatGatewayPublicIPTagKeyOfTwo := terraform.OutputMap(t, terraformOptions, "public_subnet_cidr_blocks_two")
+	actualNatGatewayPublicIPTagKeyOfThree := terraform.OutputMap(t, terraformOptions, "public_subnet_cidr_blocks_three")
+	actualNatGatewayPublicIPTagValueOfOne := actualNatGatewayPublicIPTagKeys
+
 	//then
 
+	assert.Equal(t, expectedNatGatewayPublicIPTagKeys, getKeys(actualNatGatewayPublicIPTagKeys))
+	assert.Equal(t, excectedNatGatewayPublicIPTagValueOfOne, getValues(actualNatGatewayPublicIPTagValueOfOne))
+	assert.Equal(t, expectedNatGatewayPublicIPTagValueOfTwo, getValues(actualNatGatewayPublicIPTagKeyOfTwo))
+	assert.Equal(t, expectedNatGatewayPublicIPTagValueOfThree, getValues(actualNatGatewayPublicIPTagKeyOfThree))
 	assert.Equal(t, expectedPrivateCidrBlocks, actualPrivateCidrBlocks)
 	assert.Equal(t, expectedAvailabilityZones, azs)
 

@@ -1,6 +1,6 @@
 provider "aws" {
   max_retries = 1337
-  region      = "eu-west-2"
+  region      = "eu-central-1"
   alias       = "test"
 }
 
@@ -11,7 +11,8 @@ resource "random_pet" "this" {
 module "vpc_test" {
   source = "../"
 
-  name = "terratest-arbade-vpc-${random_pet.this.id}"
+  name = "VPC"
+  #name = "terratest-arbade-vpc-${random_pet.this.id}"
   env  = "test"
   cidr = "10.100.0.0/24"
   azs = [

@@ -20,8 +20,35 @@ This module provides functionality for creating an vpc with following functional
 
 ## Pre-Requirements
 
-* Terraform `v1.0.4`
-* Go `v1.17.2`
+* Terraform [`v1.0.4` , `v1.2.8`]
+* Go [`v1.17.2`, `v1.19`] 
+
+## Suggested Versions
+
+### Terraform Releases
+| Version    | Release Sequence | Recommended Replicated CLI | Bundled Terraform CLI** | Sentinel |
+|------------|------------------|----------------------------|-------------------------|----------|
+| v202208-3  | 652              | 2.53.7                     | 1.2.6                   | 0.18.11  |
+| v202208-2  | 651              | 2.53.7                     | 1.2.6                   | 0.18.11  |
+| v202208-1  | 647              | 2.53.7                     | 1.2.6                   | 0.18.11  |
+| v202207-2* | 642              | 2.53.7                     | 1.2.4                   | 0.18.11  |
+| v202207-1  | 641              | 2.53.7                     | 1.2.4                   | 0.18.11  |
+| v202206-1  | 636              | 2.53.6                     | 1.2.1                   | 0.18.10  |
+| v202205-1  | 619              | 2.53.4                     | 1.1.9                   | 0.18.6   |
+| v202204-2* | 610              | 2.53.4                     | 1.1.7                   | 0.18.6   |
+| v202204-1  | 609              | 2.53.4                     | 1.1.7                   | 0.18.6   |
+| v202203-1  | 607              | 2.53.4                     | 1.1.6                   | 0.18.6   |
+| v202202-1  | 599              | 2.53.2                     | 1.1.5                   | 0.18.6   |
+| v202201-2  | 595              | 2.53.2                     | 1.1.3                   | 0.18.4   |
+| v202201-1  | 594              | 2.53.2                     | 1.1.3                   | 0.18.4   |
+
+
+### Go Releases
+go1.19 (released 2022-08-02)
+go1.18 (released 2022-03-15)
+Minor revisions
+go1.17 (released 2021-08-16)
+Minor revisions
 
 ### VSCode IDE Extensions (Optional)
 * HashiCorp Terraform
@@ -424,6 +451,8 @@ ok  	command-line-arguments	312.107s
 
 ```
 
+## Test Cases
+
 If CIDR Blocks will be different between actual and expected,it would be able to see actual/expected test case for instance at the below that:
 ```
 Test_ShouldBeCreateAndDestroyVPC 2022-08-22T14:26:06+03:00 logger.go:66: ["10.100.96.0/20","10.100.112.0/20","10.100.128.0/20"]
@@ -456,4 +485,73 @@ Test_ShouldBeCreateAndDestroyVPC 2022-08-22T14:43:37+03:00 logger.go:66: "10.100
     vpc_test.go:61: Received: 10.100, Expected: 10.0
     vpc_test.go:63: First Two Octets of CIDR 10.100
 
+```
+
+If Expected/Actual tags are different, it would be able to see error log message on the console:
+
+```
+Test_ShouldBeCreateAndDestroyVPC 2022-08-25T12:22:35+03:00 logger.go:66: {"Name":"eu-central-1c","Project":"Terratest-Arbade-Vpc-Skunk-Test","Terraform":"true"}
+    vpc_test.go:133: 
+        	Error Trace:	vpc_test.go:133
+        	Error:      	Not equal: 
+        	            	expected: []string{"eu-central-1a", "VPC-Test", "true"}
+        	            	actual  : []string{"eu-central-1a", "Terratest-Arbade-Vpc-Skunk-Test", "true"}
+        	            	
+        	            	Diff:
+        	            	--- Expected
+        	            	+++ Actual
+        	            	@@ -2,3 +2,3 @@
+        	            	  (string) (len=13) "eu-central-1a",
+        	            	- (string) (len=8) "VPC-Test",
+        	            	+ (string) (len=31) "Terratest-Arbade-Vpc-Skunk-Test",
+        	            	  (string) (len=4) "true"
+        	Test:       	Test_ShouldBeCreateAndDestroyVPC
+    vpc_test.go:134: 
+        	Error Trace:	vpc_test.go:134
+        	Error:      	Not equal: 
+        	            	expected: []string{"eu-central-1b", "VPC-Test", "true"}
+        	            	actual  : []string{"eu-central-1b", "Terratest-Arbade-Vpc-Skunk-Test", "true"}
+        	            	
+        	            	Diff:
+        	            	--- Expected
+        	            	+++ Actual
+        	            	@@ -2,3 +2,3 @@
+        	            	  (string) (len=13) "eu-central-1b",
+        	            	- (string) (len=8) "VPC-Test",
+        	            	+ (string) (len=31) "Terratest-Arbade-Vpc-Skunk-Test",
+        	            	  (string) (len=4) "true"
+        	Test:       	Test_ShouldBeCreateAndDestroyVPC
+    vpc_test.go:135: 
+        	Error Trace:	vpc_test.go:135
+        	Error:      	Not equal: 
+        	            	expected: []string{"eu-central-1c", "VPC-Test", "true"}
+        	            	actual  : []string{"eu-central-1c", "Terratest-Arbade-Vpc-Skunk-Test", "true"}
+        	            	
+        	            	Diff:
+        	            	--- Expected
+        	            	+++ Actual
+        	            	@@ -2,3 +2,3 @@
+        	            	  (string) (len=13) "eu-central-1c",
+        	            	- (string) (len=8) "VPC-Test",
+        	            	+ (string) (len=31) "Terratest-Arbade-Vpc-Skunk-Test",
+        	            	  (string) (len=4) "true"
+
+```
+
+It could be possible to verifying the working region actual/expected at the below that:
+
+```
+Test_ShouldBeCreateAndDestroyVPC 2022-08-25T12:30:39+03:00 region.go:92: Using region eu-central-1
+```
+
+If expected/actual subnet count are different, it would be able to see error log messsage on the console:
+
+```
+Test_ShouldBeCreateAndDestroyVPC 2022-08-25T12:42:33+03:00 logger.go:66: ["subnet-098fa2b1fa2f08fd2","subnet-0b57f3de1fbd2ed62","subnet-0babfe79823a14e49"]
+    vpc_test.go:100: 
+        	Error Trace:	vpc_test.go:100
+        	Error:      	Not equal: 
+        	            	expected: 6
+        	            	actual  : 0
+        	Test:       	Test_ShouldBeCreateAndDestroyVPC
 ```

@@ -13,9 +13,11 @@ resource "aws_subnet" "public" {
   assign_ipv6_address_on_creation = var.enable_ipv6
 
   tags = {
-    Name      = format("Public-${var.env}-%s", var.azs[count.index])
+    #Name      = format("Public-${var.env}-%s", var.azs[count.index])
+    Name      = format("Public-%s", var.azs[count.index])
     Project   = local.name
     Tier      = "Public"
+    Terraform = true
   }
 
   lifecycle {
@@ -34,6 +36,7 @@ resource "aws_internet_gateway" "public" {
 
   tags = {
     Name      = local.name
+    Terraform = true
   }
 }
 
@@ -49,8 +52,10 @@ resource "aws_eip" "public" {
   vpc = true
 
    tags = {
-    Name      = format("NGW-${var.env}%s", var.azs[count.index])
+    #Name      = format("NGW-${var.env}%s", var.azs[count.index])
+    Name      = format("NGW-%s", var.azs[count.index])
     Project   = local.name
+    Terraform = true
   }
 }
 
@@ -64,6 +69,7 @@ resource "aws_nat_gateway" "public" {
   tags = {
     Name      = var.azs[count.index]
     Project   = local.name
+    Terraform = true
   }
 }
 
@@ -104,6 +110,7 @@ resource "aws_route_table" "public" {
     Name      = "Public-${var.env}"
     Project   = local.name
     Tier      = "Public"
+    Terraform = true
     
   }
 }
